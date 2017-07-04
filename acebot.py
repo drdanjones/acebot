@@ -29,6 +29,7 @@ import prisStats
 from randomMusing import random_musings
 from projectnamer import projectnamer
 from WuTang import wutang
+from scrapeBOT import scrape_pocket
 
 
 BOT_ID = os.environ.get("BOT_ID")
@@ -49,17 +50,17 @@ def parse_slack_output(slack_rtm_output):
     if output_list and len(output_list) > 0:
         for output in output_list:
             if output and 'text' in output and AT_BOT in output['text']:
-                return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['ts'], False
+                return output['text'].split(AT_BOT)[1].strip().lower(), output['channel'], output['ts'], output['user'], False
             elif output and 'text' in output and jonRob in output['text']:
-                return output['text'].split(jonRob)[1].strip().lower(), output['channel'], output['ts'], True
-    return None, None, None, None
+                return output['text'].split(jonRob)[1].strip().lower(), output['channel'], output['ts'], output['user'], True
+    return None, None, None, None, None
 
 
 # Create a function that handles the bots responses back to the channel.  First it checks to see if certain words, phrases are used.  Depending on the logic statements it will load an answer into the response and post back to channel at the end. (Should maye split this into multiple functions or hold the data in a datasource....)
 
 # In[ ]:
 
-def handle_command(command, channel, ts):	
+def handle_command(command, channel, ts, user):
     response = "We still need to add this command"
     if command.startswith('show karik'):
         response = "https://ibb.co/goaOgF"
@@ -94,7 +95,9 @@ def handle_command(command, channel, ts):
         response = projectnamer()
     elif command.startswith('wutang my project'):
         response = wutang(command)
-
+    elif command.startswith('summar'):
+        command = command + 'chan=' + channel + 'user=' + user
+        response = scrape_pocket(command)
     elif 'dsh' in command or 'dash' in command:
         response = "AceBot does not recognise this team name.  Please use 'ACE' or 'the team formerly known as ACE' when talking to me"
 
@@ -250,11 +253,11 @@ if __name__ == "__main__":
     if slack_client.rtm_connect():
         print("AceBot connected and running!")
         while True:
-            command, channel, ts, jrFlag = parse_slack_output(slack_client.rtm_read())
+            command, channel, ts, user, jrFlag = parse_slack_output(slack_client.rtm_read())
             if jrFlag:
                 slack_client.api_call("chat.postMessage", channel=channel, text="<@jonroberts> the message above is for you...", as_user=True)
             elif command and channel:
-                handle_command(command, channel, ts)
+                handle_command(command, channel, ts, user)
             time.sleep(READ_WEBSOCKET_DELAY)
 
     else:
