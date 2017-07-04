@@ -69,18 +69,18 @@ def handle_command(command, channel, ts):
 
     elif command.startswith('file link'):
         response = r"\\dom1\data\hq\102pf\shared\group_lcdshd2\analytical services\cicfas\teams\ace" + "\\" + command[10:]
-    elif command =="tumbleweed":
+    elif command == "tumbleweed":
         response = "https://media.giphy.com/media/5x89XRx3sBZFC/giphy.gif"
 
     elif command == "doc library":
         response = "coding doc, folder doc, learn python, learn R, data security, software doc"
     elif command == "coding doc":
         response = "https://docs.google.com/document/d/1bqVkH9k4Nv4Av_-Lvewcl6un_aedOkK6v4s7Nm0V_Qk/edit"
-    elif command =="folder doc":
+    elif command == "folder doc":
         response = "https://docs.google.com/document/d/1BL57inTbBxukVJ_ti35L7fz_Un1WYybSkRi8UKEb1tA/edit#heading=h.6v5ejfe0vgdg"
     elif command == "learn python":
         response = "https://docs.google.com/document/d/1aAeiiXhrAVZPVrbKK3k6ELxbZyeKuTHnr2-pCIyAtfQ/edit#heading=h.dqyv71zc3gzp"
-    elif command =="learn R":
+    elif command == "learn R":
         response = "https://docs.google.com/document/d/1R4hBMf26T9HEnCdVz56PpZhwiCv5RhberYL3BxOSKsA/edit"
     elif command == "software doc":
         response = "https://docs.google.com/document/d/1avLqSnh6cB5FFktr1PZZbWTstkuWlGOHGBLeREA_ow4/edit?pli=1"
@@ -105,21 +105,21 @@ def handle_command(command, channel, ts):
         response = weather_emoji(command)
 
     elif command.startswith('magic8'):
-    	response = magic_8()
-    
-    elif command == "help":
-    	response = help()
+        response = magic_8()
 
-    elif command =="github":
+    elif command == "help":
+        response = help()
+
+    elif command == "github":
         response = "https://github.com/rosswyatt/acebot"
-        
-    elif command =="benugo menu":
+
+    elif command == "benugo menu":
         response = menu()
 
-    elif command =="halloumi":
+    elif command == "halloumi":
         answer = menu_search("halloumi")
         if answer[0]:
-            response = ("%s available on %s" % answer[1],answer[0])
+            response = ("%s available on %s" % answer[1], answer[0])
         else:
             response = ("Sadness, no halloumi this week.")
         answer = None
@@ -127,11 +127,11 @@ def handle_command(command, channel, ts):
         eats = command[7:]
         response = halloumi(eats)
     elif command.startswith('python'):
-        response=pyHelp(command)
-    
+        response = pyHelp(command)
+
     elif command.startswith('what project'):
         response = handle_who_what(command)
-        
+
     elif command.startswith('next holiday'):
         response = nh()
 
@@ -224,21 +224,21 @@ def ace_song():
 # In[ ]:
 
 def magic_8():
-	magic = ["It is certain", "It is decidedly so", "Without a doubt", "Yes, definitely", "You may rely on it", 
-	"As I see it, yes", "Most likely", "Outlook good", "Yes", "Signs point to yes", "Reply hazy try again", 
-	"Ask again later", "Better not tell you now", "Cannot predict now", "Concentrate and ask again", "Don't count on it",
-	"My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
+    magic = ["It is certain", "It is decidedly so", "Without a doubt", "Yes, definitely", "You may rely on it", 
+    "As I see it, yes", "Most likely", "Outlook good", "Yes", "Signs point to yes", "Reply hazy try again", 
+    "Ask again later", "Better not tell you now", "Cannot predict now", "Concentrate and ask again", "Don't count on it",
+    "My reply is no", "My sources say no", "Outlook not so good", "Very doubtful"]
 
-	return random.choice(magic)
+    return random.choice(magic)
 
 #  This function will return a all the functions available to slack bot
 
 # In[ ]:
 
 def help():
-	slack_client.api_call("chat.postMessage", channel=channel, text="Documents - doc library, coding doc, folder doc, learn python, learn R, data security, software doc, webpage, it number", as_user=True)
-	slack_client.api_call("chat.postMessage", channel=channel, text="Links - file link, github", as_user=True)
-	return "Other - ace song, weather, magic8, show karik, pie chart, tumbleweed, dsh, dash"
+    slack_client.api_call("chat.postMessage", channel=channel, text="Documents - doc library, coding doc, folder doc, learn python, learn R, data security, software doc, webpage, it number", as_user=True)
+    slack_client.api_call("chat.postMessage", channel=channel, text="Links - file link, github", as_user=True)
+    return "Other - ace song, weather, magic8, show karik, pie chart, tumbleweed, dsh, dash"
 
 
 # Load the bot to slack and print a message if successful or not.  Also run a loop that will run the two main functions (checking if a message is directed at AceBot and responding to any messages).
